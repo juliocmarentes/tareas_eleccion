@@ -193,7 +193,7 @@ base2 <- parLapply(cl, lista, function(datos_lista){
   base_act <- tibble()
   
   for(tipoo in tipos){
-    tipoo <- tipos[1]
+    #tipoo <- tipos[1]
     param_consumidor <- p_jn_act %>%
       dplyr::filter(tipo == tipoo)
     
@@ -273,6 +273,4 @@ for(i in 1:length(alternativas2)){
 
 
 patchwork::wrap_plots(lista_graficos2)  
-
-
 
