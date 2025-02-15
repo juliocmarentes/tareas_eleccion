@@ -22,18 +22,18 @@ p_jn <- crossing(cat_consumidores,  cat_alternativas) %>%
         group_by(tipo) %>%
         mutate(num = exp(v_jn),
                den = sum(num),
-               p_jn = num/den) %>%
-        ungroup()
+               p_jn = num/den,
+               y_jn = cantidad * p_jn) %>%
+        ungroup() %>%
+        select(-den, -num) 
+
+### demandas teóricas
+resumen_pjn <- p_jn %>%
+               group_by(j) %>%
+               summarise(y_j = sum(y_jn)) %>%
+               ungroup()
 
 episodios <- 10000
-
-total_gumbels <- cat_consumidores %>% 
-  summarise(total = sum(cantidad)) %>% pull() *
-  episodios * nrow(cat_alternativas)
-
-total_comparaciones <- cat_consumidores %>% 
-  summarise(total = sum(cantidad)) %>% pull() *
-  episodios
 
 lista <- list()
 
@@ -114,7 +114,7 @@ base_df <- do.call("rbind",base)
 stopCluster(cl)
 
 final <- Sys.time()
-final-inicio ## tiempo promedio de 1 minuto
+final-inicio ## tiempo promedio de 2.3 minutos
 
 base_long <- base_df %>%
             gather("alternativa","valor",-episodio, -tipo, -consumidor)
@@ -159,7 +159,7 @@ for(i in 1:length(alternativas)){
 }  
 
 
-patchwork::wrap_plots(lista_graficos)  
+plot1 <- patchwork::wrap_plots(lista_graficos)  
   
 
 ###########################
@@ -272,5 +272,8 @@ for(i in 1:length(alternativas2)){
 }  
 
 
-patchwork::wrap_plots(lista_graficos2)  
+plot2 <- patchwork::wrap_plots(lista_graficos2)  
 
+resumen_demandas
+resumen_demandas2
+resumen_pjn

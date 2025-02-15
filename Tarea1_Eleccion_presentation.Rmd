@@ -1,0 +1,58 @@
+---
+title: "Tarea 1 Elección Discreta"
+author: "Julio C. Marentes"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r, include=FALSE, echo= FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+dir_escuela<- "C:/Users/Mi/Documents/Maestrías/Colmex/4to semestre/eleccion/tareas eleccion"
+
+source(file = paste0(dir_escuela, "/Tarea1_Eleccion.R"))
+
+
+```
+
+
+# Simulando elecciones
+
+Se cuenta con 150 consumidores divididos en 3 grupos de 50 cada uno. A continuación se muestran las utilidades observadas de cada grupo ($v_{jn}$), su probabilidad asociada al modelo logit ($p_{jn}$) y por último, la demanda esperada teórica de cada grupo ($y_{jn} = p_{jn} \times M_{n}$)
+
+
+```{r, echo= FALSE}
+knitr::kable(p_jn, "simple")
+
+```
+
+A continuación, se muestran los resultados de simular 10,000 escenarios. Es decir, media y la desviación estándar muestrales de la demanda agregada de cada alternativa. Así como también gráficos de la misma demanda agregada de cada alternativa.
+
+
+## Método 1. Simulación de las variables Gumbels
+
+
+```{r, echo= FALSE}
+knitr::kable(resumen_demandas, "simple")
+plot(plot1)
+```
+
+
+## Método 2. Simulación de variables multinomiales
+
+
+```{r, echo= FALSE}
+knitr::kable(resumen_demandas2, "simple")
+plot(plot2)
+```
+
+# Comparación entre ambos métodos y contra valores teóricos.
+
+Ambos métodos son equivalentes, debido a que cada consumidor se interpreta como la realización de una variable multinomial de vector de parámetros exactamente $p_{n} = (p_{1n}, \ldots, p_{Jn})$. A continuación se muestran los valores teóricos de la demanda esperada. Para mayor detalle de estos razonamientos, véase el ejercicio 2.
+
+```{r, echo=FALSE}
+knitr::kable(resumen_pjn, "simple")
+
+```
+
+
+
