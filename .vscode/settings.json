@@ -1,0 +1,9 @@
+{
+    "java.jdt.ls.java.home": "",
+    "java.project.sourcePaths": [
+        "."
+    ],
+    "java.project.referencedLibraries": [
+        "Tarea2\\lib\\commons-math3-3.6.1.jar"
+    ]
+}
