@@ -3,7 +3,7 @@
 library(tidyverse)
 library(patchwork)
 
-ruta <- "C:/Users/Mi/Documents/Maestrías/Colmex/4to semestre/eleccion/tareas eleccion/Tarea2/data"
+ruta <- "C:/Users/Mi/Documents/Maestrias/Colmex/4to semestre/eleccion/tareas eleccion/Tarea2/data"
 base.obs <- read.csv(file.path(ruta, "resultado.csv"),
                      header = F)
 

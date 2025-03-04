@@ -7,10 +7,7 @@ output: pdf_document
 
 ```{r, include=FALSE, echo= FALSE}
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
-dir_escuela<- "C:/Users/Mi/Documents/Maestrías/Colmex/4to semestre/eleccion/tareas eleccion"
-
-source(file = paste0(dir_escuela, "/Tarea2/src/Tarea2_Eleccion.R"))
-
+source("C:/Users/Mi/Documents/Maestrias/Colmex/4to semestre/eleccion/tareas eleccion/Tarea2/src/Tarea2_Eleccion.R", encoding = "UTF-8")
 
 ```
 
