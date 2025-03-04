@@ -30,25 +30,29 @@ public class Optimizador {
 
     public double [] optimalParams(){
         Likelihood_logit logit = new Likelihood_logit(listaTickets);
+        // Definir la función de log-verosimilitud negativa para minimizar
         MultivariateFunction function = params -> -logit.likelihood_logit(params);
 
-        // Definir optimizador (BOBYQA en este caso)
-        int dim = 7; // Número de parámetros (3 alphas + 4 betas)
+        // Definir optimizador (BOBYQA)
+        int dim = 5; // Tamaño correcto de parámetros
         int numInterpolationPoints = 2 * dim + 1; // Recomendación para BOBYQA
         MultivariateOptimizer optimizer = new BOBYQAOptimizer(numInterpolationPoints);
 
-        // Optimización sin restricciones
+        // Definir límites (ajústalos si es necesario)
+        double[] lowerBounds = new double[]{-100, -100, -100, -100, -100};
+        double[] upperBounds = new double[]{100, 100, 100, 100, 100};
+
+        // Optimización con límites
         PointValuePair result = optimizer.optimize(
-                new org.apache.commons.math3.optim.MaxEval(10000),
-                new org.apache.commons.math3.optim.InitialGuess(new double[]{0, 0, 0, 0, 0, 0, 0}),
-                new org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction(function),
-                GoalType.MINIMIZE
+            new org.apache.commons.math3.optim.MaxEval(10000),
+            new org.apache.commons.math3.optim.InitialGuess(new double[]{0, 0, 0, 0, 0}),
+            new org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction(function),
+            GoalType.MINIMIZE,
+            new org.apache.commons.math3.optim.SimpleBounds(lowerBounds, upperBounds) // <-- Agregar límites
         );
 
         // Retornar los parámetros óptimos
         return result.getPoint();
     }
    
-
-    // Ejemplo de uso
 }

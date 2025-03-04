@@ -20,18 +20,19 @@ public class Likelihood_logit  {
     public double [] calcula_p_logit (int indice_ticket, double [] params){
         double [] p = new double[J];
         double [] alphas  = new double[3];
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < alphas.length; i++){
             alphas[i] = params[i];
         }
-        double [] betas = new double[4];
-        for (int i = 0; i < 4; i++){
+        double [] betas = new double[2];
+        for (int i = 0; i < betas.length; i++){
             betas[i] = params[3+i];
         }
         Ticket ticket = listaTickets.get(indice_ticket);
         double aux [] = new double[J];
         double sum = 0;
         for (int j = 0; j < J; j++){
-            double v = betas[j] * ticket.getPrices()[j] + ((j == (J-1)) ? alphas[j] :  0);
+            double v = betas[0] * ticket.getPrices()[j] + betas[1] * ticket.getFeats()[j] 
+            + ((j < (J-1)) ? alphas[j] :  0);
             aux[j] = Math.exp(v); 
             sum += aux[j];
         }
@@ -51,7 +52,8 @@ public class Likelihood_logit  {
             for(int j = 0; j < J; j++){
                 if(ticket.getBrands()[j] == 1){
                     if(p[j] > 0){
-                        likelihood += ticket.getQuantity() * Math.log(p[j]);
+                        //likelihood += ticket.getQuantity() * Math.log(p[j]);
+                        likelihood += Math.log(p[j]);
                     }
                     break;
                 }

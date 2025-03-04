@@ -8,15 +8,18 @@ public class Ticket {
     private int quantity;
     private double [] prices;
     private int [] brands;
+    private int [] feats;
 
 
-    public Ticket(int id_hogar, double income, double expend, int quantity, double[] prices, int[] brands) {
+    public Ticket(int id_hogar, double income, double expend, int quantity, double[] prices, int[] brands,
+            int[] feats) {
         this.id_hogar = id_hogar;
         this.income = income;
         this.expend = expend;
         this.quantity = quantity;
         this.prices = prices;
         this.brands = brands;
+        this.feats = feats;
     }
 
     public int getId_hogar() {
@@ -65,6 +68,14 @@ public class Ticket {
 
     public void setBrands(int[] brands) {
         this.brands = brands;
+    }
+
+    public int[] getFeats() {
+        return feats;
+    }
+
+    public void setFeats(int[] feats) {
+        this.feats = feats;
     }
 
     @Override

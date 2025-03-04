@@ -1,0 +1,42 @@
+---
+title: "Tarea 1 Elección Discreta"
+author: "Julio C. Marentes"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r, include=FALSE, echo= FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+dir_escuela<- "C:/Users/Mi/Documents/Maestrías/Colmex/4to semestre/eleccion/tareas eleccion"
+
+source(file = paste0(dir_escuela, "/Tarea2/src/Tarea2_Eleccion.R"))
+
+
+```
+
+
+# Pregunta 1
+
+Considere el modelo el modelo logit condicional usando los datos en yogurt.csv. La utilidad representativa es $$v_{nj} = \alpha_j + \beta x_{nj}$$
+
+donde $x_{nj} = (price_j, feat_j)$
+
+1. Normalice $\alpha_4 = 0$. Argumente porque con esta normalización el modelo está identificado. 
+
+Al importar solamente la diferencia entre las utilidades ($v_{jn} - v_{in}$), la diferencia entre 2 $\alpha$'s al ser una constante, existe una cantidad infinita de parejas de números reales que su diferencia es la misma constante. Es por eso que tomamos una "condición inicial" normalizando una constante a cero. En este caso, al hacer $\alpha_4 = 0$, logramos una única triada de valores del resto de las $\alpha$'s que cumplen estas diferencias mencionadas.
+
+## Estimación de los parámetros por máxima verosimilitud
+
+A continuación se muestra:
+
+1. Medias muestrales del proceso Bootsrap (3211 iteraciones)
+2. Matriz de varianzas y covarianzas muestral, la diagonal representa la varianza estimada bajo el supuesto que cada parámetro distribuye asintóticamente normal ("Asintotia")
+3. Correlograma para observar relación entre los parámetros, si fuese necesario ese análisis.
+4. Distribución de los valores estimados de cada parámetro. Recuerdese que $\alpha_4$ es idénticamente 0.
+
+```{r, echo= FALSE}
+knitr::kable(resumen_base, "simple")
+knitr::kable(Sigma, "simple")
+corrplot::corrplot(cor(base))
+plot(plot1)
+```
