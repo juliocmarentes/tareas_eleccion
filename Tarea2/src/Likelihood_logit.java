@@ -17,6 +17,15 @@ public class Likelihood_logit  {
 
     }
 
+    public double [][] calcula_p_logit_todos(double [] params){
+        int T = listaTickets.size();
+        double [][] p = new double[T][J];
+        for(int t = 0; t < T; t++){
+            p[t] = calcula_p_logit(t,params);
+        }
+        return p;
+    }
+
     public double [] calcula_p_logit (int indice_ticket, double [] params){
         double [] p = new double[J];
         double [] alphas  = new double[3];

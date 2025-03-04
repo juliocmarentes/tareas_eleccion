@@ -30,10 +30,12 @@ A continuación se muestra:
 2. Matriz de varianzas y covarianzas muestral, la diagonal representa la varianza estimada bajo el supuesto que cada parámetro distribuye asintóticamente normal ("Asintotia")
 3. Correlograma para observar relación entre los parámetros, si fuese necesario ese análisis.
 4. Distribución de los valores estimados de cada parámetro. Recuerdese que $\alpha_4$ es idénticamente 0.
+5. Matriz de elasticidades precio del primer individuo. Me parece incorrecto reportar un promedio de todas las matrices (podria estar bien) pero entonces por eso solo reportamos esta. Las demás se calculan en el codigo Java.
 
 ```{r, echo= FALSE}
 knitr::kable(resumen_base, "simple")
 knitr::kable(Sigma, "simple")
 corrplot::corrplot(cor(base))
 plot(plot1)
+knitr::kable(base2, "simple", row.names = T)
 ```

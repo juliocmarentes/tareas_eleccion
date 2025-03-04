@@ -1,5 +1,6 @@
 package Tarea2.src;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +26,44 @@ public class Orquestador {
         //optimiza();
         //prueba();
         double [][] optimalParams = optimiza_general();
+        double [] params_mean = getParams_mean(optimalParams);
         Utils_CSV.saveToCSV(optimalParams, ruta+"/resultado.csv");
+        ArrayList<double [][]> elasticidades = getElasticidades(params_mean);
+        Utils_CSV.saveToCSV(elasticidades.get(0), ruta+"/elasticidades.csv");
         
+    }
+
+    public double [] getParams_mean(double [][] optimalParams){
+        double [] betas_mean = new double[5];
+        for (int i = 0; i < 5; i++){
+            double sum = 0;
+            for (int j = 0; j < M; j++){
+                sum += optimalParams[j][i];
+            }
+            betas_mean[i] = sum/M;
+        }
+        return betas_mean;
+    }
+
+    public ArrayList<double [][]> getElasticidades(double [] params_mean){
+        ArrayList<double [][]> elasticidades = new ArrayList<>();
+        Likelihood_logit likelihood = new Likelihood_logit(listaTickets);
+        double [][] ps = likelihood.calcula_p_logit_todos(params_mean); 
+            for (int i = 0; i < listaTickets.size(); i++){
+                Ticket ticket = listaTickets.get(i);
+                double [][] elasticidades_i = new double[ticket.getPrices().length][ticket.getPrices().length];
+                for (int j = 0; j < ticket.getPrices().length; j++){
+                    for (int k = 0; k < ticket.getPrices().length; k++){
+                        if(j == k){
+                            elasticidades_i[j][k] = params_mean[3] * ticket.getPrices()[j] * (1 - ps[i][j]);
+                        }else{
+                            elasticidades_i[j][k] = - params_mean[3] * ticket.getPrices()[k] * ps[i][k];
+                        }
+                    }
+                }
+                elasticidades.add(elasticidades_i);
+            }
+        return elasticidades;
     }
 
     public void leedatos() {

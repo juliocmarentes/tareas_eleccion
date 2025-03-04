@@ -7,6 +7,9 @@ ruta <- "C:/Users/Mi/Documents/Maestrias/Colmex/4to semestre/eleccion/tareas ele
 base.obs <- read.csv(file.path(ruta, "resultado.csv"),
                      header = F)
 
+base2.obs <- read.csv(file.path(ruta, "elasticidades.csv"),
+                      header = F)
+
 base <- base.obs %>%
         setNames(c("alpha_1",
                    "alpha_2",
@@ -14,6 +17,11 @@ base <- base.obs %>%
                    "beta_price",
                    "beta_feat")) %>%
          relocate(beta_price, .after = beta_feat)
+
+base2 <- base2.obs %>%
+         setNames(paste0("Alt_",1:4))
+
+rownames(base2) <- paste0("Alt_",1:4)
 
 resumen_base <- base %>%
                 gather("serie","valor") %>%
