@@ -1,5 +1,5 @@
 ---
-title: "Tarea 1 Elección Discreta"
+title: "Tarea 3 Elección Discreta"
 author: "Julio C. Marentes"
 date: "`r Sys.Date()`"
 output: pdf_document
@@ -7,35 +7,43 @@ output: pdf_document
 
 ```{r, include=FALSE, echo= FALSE}
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
-source("C:/Users/Mi/Documents/Maestrias/Colmex/4to semestre/eleccion/tareas eleccion/Tarea2/src/Tarea2_Eleccion.R", encoding = "UTF-8")
+source("C:/Users/Mi/Documents/Maestrias/Colmex/4to semestre/eleccion/tareas eleccion/Tarea3/src/Tarea3_Eleccion.R", encoding = "UTF-8")
 
 ```
 
 
-# Pregunta 1
+# Plática con chatgpt
 
-Considere el modelo el modelo logit condicional usando los datos en yogurt.csv. La utilidad representativa es $$v_{nj} = \alpha_j + \beta x_{nj}$$
 
-donde $x_{nj} = (price_j, feat_j)$
+## Yo:
 
-1. Normalice $\alpha_4 = 0$. Argumente porque con esta normalización el modelo está identificado. 
+hola chat, tengo un codigo que lo que hace es recibir un arraylist de objetos tipo Ticket. Cada ticket tiene toda la información necesaria para ajustar un modelo logit. la función calcula_p_logit, recibe el indice del ticket a calcular su vector de probabilidades y un arreglo double de parámetros. en estos parámetros actualmente recibía 7 valores. Son 7 valores ya que el modelo cuenta con 4 alternativas, por lo que son 3 alphas (efecto fijo) haciendo alpha_4 = 0 y 4 betas. El metodo likelihood_logit calcula la verosimilitud de la muestra completa recibiendo los mismos 7 parámetros. Lo que necesito que me ayudes a modificar, es hacer que ahora el modelo ajustado sea un modelo nested logit. El constructor puede recibir un vector de indices de tamaño J para guardar ahí el nido al que pertenece cada alternativa (si crees que hay una mejor forma, hazlo) y hay que modificar el método calcula_p_logit para que ahora calcule correctamente las probabilidades de eleccion tomando en cuenta que el vector de parametros recibirá ahora también las variables lambdas (agregando sobre eso, realiza mejor la transformación $\lambda_r = \frac{e^{\gamma_r}}{1 + e^{\gamma_r}}$ para que asegures que la lambda_r esté entre 0 y 1. Te dejo el codigo a continuación:
 
-Al importar solamente la diferencia entre las utilidades ($v_{jn} - v_{in}$), la diferencia entre 2 $\alpha$'s al ser una constante, existe una cantidad infinita de parejas de números reales que su diferencia es la misma constante. Es por eso que tomamos una "condición inicial" normalizando una constante a cero. En este caso, al hacer $\alpha_4 = 0$, logramos una única triada de valores del resto de las $\alpha$'s que cumplen estas diferencias mencionadas.
+## chat:
+
+Aquí tienes tu código modificado para que implemente un modelo Nested Logit en lugar de un Logit estándar. Se han realizado las siguientes modificaciones:
+
+Se agregó un vector nidos que asigna a cada alternativa un grupo o nido.
+Se incluyeron parámetros gamma_r en params, que se transforman en lambda_r usando la función sigmoide para garantizar que estén en el intervalo (0,1).
+Se modificó calcula_p_logit para calcular probabilidades bajo un modelo Nested Logit, siguiendo la estructura de nidos.
+Aquí está la versión actualizada:
+
+Resumen de cambios:
+1. Vector nidos agregado: Ahora el constructor recibe un vector de nidos para indicar la pertenencia de cada alternativa a un grupo.
+
+2. Cálculo de probabilidades modificado: Se ajustó calcula_p_logit para calcular la probabilidad de cada alternativa dentro de su nido y la probabilidad del nido en la elección final.
 
 ## Estimación de los parámetros por máxima verosimilitud
 
 A continuación se muestra:
 
-1. Medias muestrales del proceso Bootsrap (3211 iteraciones)
+1. Medias muestrales del proceso Bootsrap (3211 iteraciones) para el modelo logit (Tarea anterior) y el modelo nested logit.
 2. Matriz de varianzas y covarianzas muestral, la diagonal representa la varianza estimada bajo el supuesto que cada parámetro distribuye asintóticamente normal ("Asintotia")
-3. Correlograma para observar relación entre los parámetros, si fuese necesario ese análisis.
-4. Distribución de los valores estimados de cada parámetro. Recuerdese que $\alpha_4$ es idénticamente 0.
-5. Matriz de elasticidades precio del primer individuo. Me parece incorrecto reportar un promedio de todas las matrices (podria estar bien) pero entonces por eso solo reportamos esta. Las demás se calculan en el codigo Java.
+3. Distribución de los valores estimados de cada parámetro. Recuerdese que $\alpha_4$ es idénticamente 0.
 
 ```{r, echo= FALSE}
+knitr::kable(resumen_base_ant, "simple")
 knitr::kable(resumen_base, "simple")
 knitr::kable(Sigma, "simple")
-corrplot::corrplot(cor(base))
 plot(plot1)
-knitr::kable(base2, "simple", row.names = T)
 ```

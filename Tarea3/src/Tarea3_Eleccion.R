@@ -3,23 +3,46 @@
 library(tidyverse)
 library(patchwork)
 
-ruta <- "C:/Users/julio/OneDrive/Documentos/Maestría/cuarto semestre/eleccion/tareas_eleccion/Tarea3/data"
+ruta_ant <- "C:/Users/Mi/Documents/Maestrias/Colmex/4to semestre/eleccion/tareas eleccion/Tarea2/data"
+base_ant.obs <- read.csv(file.path(ruta_ant, "resultado.csv"),
+                     header = F)
+
+base_ant <- base_ant.obs %>%
+  setNames(paste0("logit_",c("alpha_1",
+                    "alpha_2",
+                    "alpha_3",
+                    "beta_price",
+                    "beta_feat"))) %>%
+  relocate(logit_beta_price, .after = logit_beta_feat)
+
+resumen_base_ant <- base_ant %>%
+  gather("serie","valor") %>%
+  group_by(serie) %>%
+  summarise(mean = mean(valor)) %>%
+  ungroup()
+
+ruta <- "C:/Users/Mi/Documents/Maestrias/Colmex/4to semestre/eleccion/tareas eleccion/Tarea3/data"
 base.obs <- read.csv(file.path(ruta, "resultado.csv"),
                      header = F)
 
-
-
 base <- base.obs %>%
-        setNames(c("alpha_1",
-                   "alpha_2",
-                   "alpha_3",
-                   "beta_price",
-                   "beta_feat",
-                   "lambda_1",
-                   "lambda_2")) %>%
-         relocate(beta_price, .after = beta_feat)
+        setNames(paste0("nlogit_",c("alpha_1",
+                          "alpha_2",
+                          "alpha_3",
+                          "beta_price",
+                          "beta_feat",
+                          "gamma_1",
+                          "gamma_2"))) %>%
+         relocate(nlogit_beta_price, .after = nlogit_beta_feat) %>%
+         mutate(nlogit_lambda_1 = exp(nlogit_gamma_1)/(1+exp(nlogit_gamma_1)),
+                nlogit_lambda_2 = exp(nlogit_gamma_2)/(1+exp(nlogit_gamma_2))) %>%
+         select(-nlogit_gamma_1, -nlogit_gamma_2)
 
+nombres <- data.frame(nombre= (names(base))) %>%
+           mutate(nombre2 = substr(nombre, 8, nchar(nombre)))  
 
+base2 <- base %>%
+         setNames(nombres%>%pull(nombre2))
 
 resumen_base <- base %>%
                 gather("serie","valor") %>%
@@ -27,7 +50,7 @@ resumen_base <- base %>%
                 summarise(mean = mean(valor)) %>%
                 ungroup()
 
-Sigma <- cov(base)
+Sigma <- cov(base2)
 
 lista_graficos <- list()
 
@@ -51,7 +74,7 @@ for(i in 1:ncol(base)){
 }  
 
 plot1 <- patchwork::wrap_plots(lista_graficos)  
-
+plot1
 
 
 
