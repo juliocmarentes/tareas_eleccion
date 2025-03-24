@@ -3,25 +3,23 @@
 library(tidyverse)
 library(patchwork)
 
-ruta <- "C:/Users/Mi/Documents/Maestrias/Colmex/4to semestre/eleccion/tareas eleccion/Tarea2/data"
+ruta <- "C:/Users/julio/OneDrive/Documentos/Maestría/cuarto semestre/eleccion/tareas_eleccion/Tarea3/data"
 base.obs <- read.csv(file.path(ruta, "resultado.csv"),
                      header = F)
 
-base2.obs <- read.csv(file.path(ruta, "elasticidades.csv"),
-                      header = F)
+
 
 base <- base.obs %>%
         setNames(c("alpha_1",
                    "alpha_2",
                    "alpha_3",
                    "beta_price",
-                   "beta_feat")) %>%
+                   "beta_feat",
+                   "lambda_1",
+                   "lambda_2")) %>%
          relocate(beta_price, .after = beta_feat)
 
-base2 <- base2.obs %>%
-         setNames(paste0("Alt_",1:4))
 
-rownames(base2) <- paste0("Alt_",1:4)
 
 resumen_base <- base %>%
                 gather("serie","valor") %>%

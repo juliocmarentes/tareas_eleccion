@@ -1,4 +1,4 @@
-package Tarea2.src;
+package Tarea3.src;
 
 public class Ticket {
     
